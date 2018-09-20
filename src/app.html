@@ -1,13 +1,14 @@
 <template>
-  <router-view></router-view>
-  <!-- <require from="./book-list"></require>
-
-  <h1>Add Book</h1>
-
-  <form submit.trigger="addBook()">
-    <label for="book-title"></label>
-    <input type="text" id="book-title" value.bind="bookTitle" placeholder="book title...">
-    <input type="submit" value="Add ">
-    <book-list books.bind="books"></book-list>
-  </form> -->
+  <require from="styles.css"></require>
+  <div class="container">
+    <div class="header clearfix">
+      <h3 class="text-muted">
+        <span class="brand-highlight">my</span>-books
+      </h3>
+    </div>
+    <router-view></router-view>
+    <!-- <footer class="footer">
+      <p>stuff</p>
+    </footer> -->
+  </div>
 </template>
