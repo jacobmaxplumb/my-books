@@ -15,6 +15,8 @@ export class Books {
   }
 
   bind() {
-    this.bookApi.getBooks().then(savedBooks => this.books = savedBooks);
+    this.bookApi.getBooks().then(res => {
+      this.books = res;
+    })
   }
 }

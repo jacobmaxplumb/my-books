@@ -1,12 +1,10 @@
 <template>
   <require from="./book-list"></require>
-  
-  <h1 class="page-heading">Books</h1>
+  <require from="./heading.html"></require>
+  <heading text.bind="'books'"></heading>
   <div class="card">
     <div class="card-block">
-      <form class="form-inline" submit.trigger="addBook()">
-        <label for="book-title"></label>
-
+      <form class="form-inline" submit.trigger="addBook()" style="padding: 10px">
         <input type="text" class="form-control" value.bind="bookTitle" id="book-title" placeholder="book title...">
         <input type="submit" class="btn btn-success tap-right" value="Add">
       </form>
