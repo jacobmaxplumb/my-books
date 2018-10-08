@@ -7,7 +7,7 @@
     <div class="card-block">
       <form class="form-inline" submit.trigger="addBook()" style="padding: 10px">
         <input type="text" class="form-control" value.bind="bookTitle" id="book-title" placeholder="book title...">
-        <input type="submit" class="btn btn-success tap-right" value="Add">
+        <input type="submit" disabled.bind="canAdd" class="btn btn-success tap-right" value="Add">
       </form>
     </div>
   </div>
