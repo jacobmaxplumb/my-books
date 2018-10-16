@@ -1,19 +1,32 @@
 <template>
   <require from="../attributes/tooltip"></require>
-  <ul class="books list-group list-group-flush">
-    <li class="list-group-item ${$even ? 'book-even' : ''}" repeat.for="book of books">
-      <div class="row">
-        <div class="col-11">
-          ${book.title} ${bookLocation($first, $last)}
-        </div>
-        <div class="col-1" style="text-align: right">
-          <span class="remove-button"
-            click.delegate="removeBook($index)"
-            tooltip="title: Remove book from list; placement: right">
-            <i class="fa fa-trash" aria-hidden="true"></i>
-          </span>
-        </div>
+  <require from="../value-converters/book-status"></require>
+  <require from="../value-converters/filter"></require>
+  <require from="../value-converters/search-bold"></require>
+  <div class="card">
+    <div class="card-header form-inline">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="filter" aria-describedby="filter-icon" value.bind="searchTerm">
       </div>
-    </li>
-  </ul>
+    </div>
+    <ul class="books list-group list-group-flush">
+      <li class="list-group-item ${$even ? 'book-even' : ''}" repeat.for="book of books | filter:searchTerm">
+        <div class="row">
+          <div class="col-10" innerhtml.bind="book.title | searchBold:searchTerm">
+          </div>
+          <span class="col-1">
+            <i class="fa ${book.status | bookStatus}"></i>
+          </span>
+          <div class="col-1">
+            <span class="remove-button"
+              click.delegate="removeBook($index)"
+              tooltip="title: Remove book from list; placement: right">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
 </template>
