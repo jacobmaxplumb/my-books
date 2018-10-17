@@ -1,15 +1,15 @@
 import {inject, computedFrom, observable} from 'aurelia-framework';
 import { BookApi } from '../../services/book-api';
+import { EventAggregator } from 'aurelia-event-aggregator';
 
-@inject(BookApi)
+@inject(BookApi, EventAggregator)
 export class Books {
 
-  @observable bookTitle = "";
-  canAdd = true;
-
-  constructor(bookApi) {
+  constructor(bookApi, eventAggregator) {
+    this.bookTitle = "";
     this.books = [];
     this.bookApi = bookApi;
+    this.eventAggregator = eventAggregator;
   }
 
   addBook() {
@@ -17,17 +17,25 @@ export class Books {
     this.bookTitle = '';
   }
 
+  removeBook(index) {
+    this.books.splice(index, 1);
+  }
+
   bind() {
+    this.removeBookSubscription = this.eventAggregator.subscribe('remove-book', data => {
+      this.removeBook(data.index);
+    })
     this.bookApi.getBooks().then(res => {
       this.books = res;
     })
   }
 
-  bookTitleChanged(newValue, oldValue) {
-    if (newValue.length > 0) {
-      this.canAdd = false;
-    } else {
-      this.canAdd = true;
-    }
+  @computedFrom('bookTitle.length')
+  get canAdd() {
+    return this.bookTitle.length === 0;
+  }
+
+  detached() {
+    this.removeBookSubscription.dispose();
   }
 }

@@ -1,14 +1,15 @@
-import { bindable } from 'aurelia-framework';
+import { bindable, inject } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
 
+@inject(EventAggregator)
 export class BookList {
     @bindable books;
 
-    bookLocation(isFirst, isLast) {
-      if (isFirst) return ' - first book';
-      if (isLast) return ' - last book';
+    constructor(eventAggregator) {
+      this.eventAggregator = eventAggregator;
     }
 
     removeBook(index) {
-      this.books.splice(index, 1);
+      this.eventAggregator.publish('remove-book', {index: index});
     }
 }

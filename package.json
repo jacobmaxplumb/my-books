@@ -10,8 +10,11 @@
   "dependencies": {
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.2.0",
+    "aurelia-event-aggregator": "^1.0.1",
     "aurelia-fetch-client": "^1.5.0",
     "bluebird": "^3.5.1",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
     "requirejs": "^2.3.5",
     "text": "github:requirejs/text#latest"
   },
