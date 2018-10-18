@@ -3,6 +3,7 @@
   <require from="../value-converters/book-status"></require>
   <require from="../value-converters/filter"></require>
   <require from="../value-converters/search-bold"></require>
+  <require from="./book"></require>
   <div class="card">
     <div class="card-header form-inline">
       <div class="input-group">
@@ -10,22 +11,7 @@
       </div>
     </div>
     <ul class="books list-group list-group-flush">
-      <li class="list-group-item ${$even ? 'book-even' : ''}" repeat.for="book of books | filter:searchTerm">
-        <div class="row">
-          <div class="col-10" innerhtml.bind="book.title | searchBold:searchTerm">
-          </div>
-          <span class="col-1">
-            <i class="fa ${book.status | bookStatus}"></i>
-          </span>
-          <div class="col-1">
-            <span class="remove-button"
-              click.delegate="removeBook($index)"
-              tooltip="title: Remove book from list; placement: right">
-              <i class="fa fa-trash" aria-hidden="true"></i>
-            </span>
-          </div>
-        </div>
-      </li>
+      <book containerless repeat.for="book of books | filter:searchTerm" book.bind="book" search-term.bind="searchTerm"></book>
     </ul>
   </div>
   

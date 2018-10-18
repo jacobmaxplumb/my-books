@@ -22,6 +22,7 @@ export class Book {
   }
 
   toggleEditMode(event) {
+    console.log('toggleEditMode ran')
     this.editMode = !this.editMode;
   }
 
@@ -30,7 +31,8 @@ export class Book {
   }
 
   subscribeToEvents() {
-    this.editModeChangedSubscription = this.eventAggregator.subscribe('edit-mode-changed', mode => {
+    this.editModeChangedSubscription = this.eventAggregator.subscribe('edit-mode-changed', (mode) => {
+      console.log('this is happening')
       this.editMode = mode;
     });
   }
