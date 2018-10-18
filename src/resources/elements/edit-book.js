@@ -1,72 +1,73 @@
-import { bindable, inject, computedFrom } from 'aurelia-framework';
-import { EventAggregator } from 'aurelia-event-aggregator';
+
+import {bindable, inject, computedFrom} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
 import _ from 'lodash';
 
-inject(EventAggregator)
-export class EditBook {
+@inject(EventAggregator,)
+export class EditBook{
+    
+    @bindable editMode;
+    @bindable book;
 
-  @bindable editMode;
-  @bindable book;
+    constructor(eventAggregator){
+        this.eventAggregator = eventAggregator;
+        this.ratingChangedListener =  e => this.temporaryBook.rating = e.detail.rating;
+    }
 
-  constructor(eventAggregator) {
-    this.resetTempBook();
-    this.eventAggregator = eventAggregator;
-  }
+    bind(){
+        this.resetTempBook(); 
+        this.ratingElement.addEventListener("change", this.ratingChangedListener);
+    }
 
-  resetTempBook() {
-    this.temporaryBook = Object.assign({}, this.book);
-  }
+    editModeChanged(editModeNew, editModeOld){
+        if(editModeNew) this.resetTempBook();
+    }
 
-  bind() {
-    this.resetTempBook();
-  }
+    @computedFrom('temporaryBook.title', 'temporaryBook.description', 'temporaryBook.rating')
+    get canSave(){
+        return this.temporaryBook && !_.isEqual(this.temporaryBook, this.book);
+    }
 
-  editModeChanged(editModeNew, editModeOld) {
-    if (editModeNew) this.resetTempBook();
-  }
+    resetTempBook(){
+        this.temporaryBook = Object.assign({}, this.book);
+    }
 
-  @computedFrom('temporaryBook.tite', 'temporaryBook.description')
-  get canSave() {
-    return this.temporaryBook && !_.isEqual(this.temporaryBook, this.book);
-  }
+    cancel(){
+        this.temporaryBook = this.book;
+        this.starRatingViewModel.applyRating(this.temporaryBook.rating);
+        this.toggleEditMode();
+    }
+    
+    save(){
+        this.loading = true;
+        this.publishBookSavedEvent();
+    }
 
-  cancel() {
-    this.temporaryBook = this.book;
-    this.toggleEditMode();
-  }
+    bookSaveComplete(){
+        this.loading = false;
+        this.saved = true;
+        
+        setTimeout(() => {
+           this.saved = false;
+           this.resetTempBook();
+           this.toggleEditMode();  
+        }, 500);  
+    }
 
-  save() {
-    this.loading = true;
-    this.publishBookSavedEvent();
-  }
+    publishBookSavedEvent(){
+        this.eventAggregator.publish('save-book', this.temporaryBook);
+    }
 
-  bookSaveComplete() {
-    this.loading = false;
-    this.saved = true;
-    setTimeout(() => {
-      this.resetTempBook();
-      this.saved = false;
-      this.toggleEditMode();
-    }, 500);
-  }
+    attached(){
+        this.bookSaveCompleteSubscription = this.eventAggregator.subscribe(`book-save-complete-${this.book.Id}`, () =>  this.bookSaveComplete());
+    }
 
-  publishBookSavedEvent() {
-    this.eventAggregator.publish('save-book', this.temporaryBook);
-  }
+    toggleEditMode(){
+        this.eventAggregator.publish('edit-mode-changed', !this.editMode );
+    }
 
-  attached() {
-    console.log('')
-    //this.bookSaveCompleteSubscription = this.eventAggregator.subscribe(`book-save-complete-${this.book.Id}`, () => this.bookSaveComplete());
-  }
-
-  toggleEditMode() {
-    this.eventAggregator.publish('edit-mode-changed', !this.editMode);
-  }
-
-  detached() {
-    console.log('')
-    // this.bookSaveCompleteSubscription.dispose();
-  }
-
-
+    detached(){
+        this.ratingElement.removeEventListener('change', this.ratingChangedListener);
+        this.bookSaveCompleteSubscription.dispose();
+    }
 }
