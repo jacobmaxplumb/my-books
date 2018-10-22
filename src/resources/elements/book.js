@@ -1,42 +1,42 @@
-import {bindable, inject} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
+import { bindable, inject } from 'aurelia-framework';
+import { EventAggregator } from 'aurelia-event-aggregator';
 
 @inject(EventAggregator)
-export class Book{
+export class Book {
 
-    @bindable book;   
-    @bindable searchTerm;
-    
-    constructor(eventAggregator){
-        this.eventAggregator = eventAggregator;
-        this.editMode = false;
-    }
-    
-    markRead(){
-        this.book.readDate = new Date();
-        this.book.read = true;
-    }
+  @bindable book;
+  @bindable searchTerm;
 
-    removeBook(){
-        this.eventAggregator.publish('book-removed', this.book);
-    }
+  constructor(eventAggregator) {
+    this.eventAggregator = eventAggregator;
+    this.editMode = false;
+  }
 
-    toggleEditMode(event){
-        this.editMode = !this.editMode;
-    }
+  markRead() {
+    this.book.readDate = new Date();
+    this.book.read = true;
+  }
 
-    bind(){
-        this.subscribeToEvents();
-    }
-    
-    subscribeToEvents(){
-        this.editModeChangedSubscription = 
-            this.eventAggregator.subscribe('edit-mode-changed', mode => {
-                                             this.editMode = mode; 
-        });
-    }
+  removeBook() {
+    this.eventAggregator.publish('book-removed', this.book);
+  }
 
-    unbind(){
-        this.editModeChangedSubscription.dispose();
-    }
+  toggleEditMode(event) {
+    this.editMode = !this.editMode;
+  }
+
+  bind() {
+    this.subscribeToEvents();
+  }
+
+  subscribeToEvents() {
+    this.editModeChangedSubscription =
+      this.eventAggregator.subscribe('edit-mode-changed', mode => {
+        this.editMode = mode;
+      });
+  }
+
+  unbind() {
+    this.editModeChangedSubscription.dispose();
+  }
 }
