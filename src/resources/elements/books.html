@@ -1,20 +1,28 @@
+
 <template>
-  <require from="./book-list"></require>
-  <require from="./heading.html"></require>
-  <heading text.bind="'books'"></heading>
+    <require from="./book-list"></require>
+    <require from="./heading.html"></require>
+    <heading text.bind="'books'"></heading>
 
-  <div class="card">
-    <div class="card-body">
-      <form class="form-inline" submit.trigger="addBook()">
+    <div class="card">
+        <div class="card-body">
+          <form class="form-inline" submit.trigger="addBook()">
 
-        <label for="book-title"></label>
+            <label for="book-title"></label>
 
-        <input class="form-control" value.bind="bookTitle" id="book-title" type="text">
+            <input class="form-control" value.bind="bookTitle"
+                  id="book-title"
+                  type="text">
+     
+            <input class="btn btn-success tap-right" 
+                   type="submit" 
+                   value="add" 
+                   disabled.one-way="canAdd">
 
-        <input class="btn btn-success tap-right" type="submit" value="add" disabled.one-way="canAdd">
-
-      </form>
+          </form>
+        </div>
     </div>
+<<<<<<< HEAD
   </div>
   <hr />
   <book-list if.bind="books.length > 0 
@@ -22,4 +30,8 @@
                      && shelves.length > 0"
     shelves.bind="shelves" genres.bind="genres" books.bind="books">
   </book-list>
+=======
+    <hr/>
+    <book-list books.bind="books"></book-list>
+>>>>>>> parent of 730355e... reformmated
 </template>
