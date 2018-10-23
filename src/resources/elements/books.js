@@ -1,4 +1,3 @@
-
 import { bindable, inject, computedFrom } from 'aurelia-framework';
 import { BookApi } from '../../services/book-api';
 import { EventAggregator } from 'aurelia-event-aggregator';
@@ -13,31 +12,10 @@ export class Books {
     this.bookApi = bookApi;
     this.eventAggregator = eventAggregator;
   }
-
-  addBook() {
-    this.books.push({ title: this.bookTitle });
-    this.bookTitle = "";
-  }
-
-  removeBook(toRemove) {
-
-    let bookIndex = _.findIndex(this.books, book => {
-      return book.Id === toRemove.Id;
-    });
-
-    this.books.splice(bookIndex, 1);
-  }
-
   bind() {
     this.loadBooks();
     this.loadGenres();
     this.loadShelves();
-  }
-
-  loadBooks() {
-    this.bookApi.getBooks()
-      .then(savedBooks =>
-        this.books = savedBooks);
   }
 
   loadGenres() {
@@ -52,6 +30,20 @@ export class Books {
       .then(shelves => {
         this.shelves = shelves;
       });
+  }
+
+  addBook() {
+    this.books.push({ title: this.bookTitle, shelves: [], genres: [] });
+    this.bookTitle = "";
+  }
+
+  removeBook(toRemove) {
+
+    let bookIndex = _.findIndex(this.books, book => {
+      return book.Id === toRemove.Id;
+    });
+
+    this.books.splice(bookIndex, 1);
   }
 
 
@@ -70,15 +62,20 @@ export class Books {
   }
 
   bookSaved(updatedBook) {
-
     let index = this.books.findIndex(book => book.Id == updatedBook.Id);
-
     Object.assign(this.books[index], updatedBook);
 
     this.bookApi
       .saveBook(updatedBook)
-      .then((savedBook) => this.eventAggregator
-        .publish(`book-save-complete-${savedBook.Id}`));
+      .then((savedBook) => {
+        this.eventAggregator.publish(`book-save-complete-${savedBook.Id}`);
+      });
+  }
+
+  loadBooks() {
+    this.bookApi.getBooks()
+      .then(savedBooks =>
+        this.books = savedBooks);
   }
 
   @computedFrom('bookTitle.length')
