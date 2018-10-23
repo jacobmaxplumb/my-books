@@ -1,4 +1,3 @@
-
 import { computedFrom, bindable } from 'aurelia-framework';
 
 export class BookStats {

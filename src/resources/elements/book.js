@@ -1,3 +1,4 @@
+
 import { bindable, inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
@@ -5,6 +6,8 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 export class Book {
 
   @bindable book;
+  @bindable genres;
+  @bindable shelves;
   @bindable searchTerm;
 
   constructor(eventAggregator) {

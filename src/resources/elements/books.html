@@ -17,8 +17,9 @@
     </div>
   </div>
   <hr />
-  <book-list if.bind="books.length > 0
-      && genres.length > 0
-      && shelves.length > 0" books.bind="books"
-    genres.bind="genres" shelves.bind="shelves"></book-list>
+  <book-list if.bind="books.length > 0 
+                     && genres.length > 0 
+                     && shelves.length > 0"
+    shelves.bind="shelves" genres.bind="genres" books.bind="books">
+  </book-list>
 </template>
